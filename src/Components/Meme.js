@@ -2,10 +2,11 @@ import React, {Component} from 'react'
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import {connect} from 'react-redux'
+import {favorited, unfavorite} from '../ducks/reducer'
 
 class Meme extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             favorited: false
         }
@@ -23,10 +24,10 @@ class Meme extends Component {
     }
 
     delete = id => {
-        axios.delete(`/api/memes/${id}`)
+        axios.delete(`/api/favorites/${id}`)
         .then(() => {
             if(this.props.favorite){
-                this.props.unfavorite();
+                this.props.unfavorite(id);
             } else {
                 this.props.reRender()
             }
@@ -49,6 +50,7 @@ class Meme extends Component {
     }
 
     render(){
+        console.log(this.props)
         return(
             <div className='meme-box'>
                 <div className='meme-title'>{this.props.memeInfo.title}</div>
@@ -71,8 +73,9 @@ class Meme extends Component {
 
 function mapStateToProps(state) {
     return {
-        favorites: state.reducer.favrited
+        favorites: state.reducer.favorited
+
     }
 }
 
-export default connect(mapStateToProps, {unfavorite, favorited})(withRouter(Meme))
+export default connect(mapStateToProps, {favorited, unfavorite})(withRouter(Meme))

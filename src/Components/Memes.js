@@ -4,11 +4,12 @@ import axios from 'axios'
 import Meme from './Meme'
 
 class Memes extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             memes: []
         }
+        this.reRender = this.reRender.bind(this)
     }
 
     componentDidMount(){
@@ -17,12 +18,14 @@ class Memes extends Component {
 
     reRender = () => {
         axios.get('/api/memes')
-        .then(res => this.setState({
-            mememes: res.data
+        .then(res => 
+            this.setState({
+            memes: res.data
         }))
     }
 
     render(){
+        console.log(this.state.memes)
         return (
             <div className='meme-dashboard'>
                 <Link to='/form' className='add-meme-link'>Add A Meme</Link>
